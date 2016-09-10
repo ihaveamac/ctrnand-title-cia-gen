@@ -1,0 +1,34 @@
+ctrnand-title-cia-gen
+
+This is intended to create "legit CIAs" from installed CTRNAND titles. It uses:
+ - a dumped ticket.db (/dbs/ticket.db) for tickets,
+ - title folder (/title) for contents.
+
+"Legit CIAs" can only be made if the ticket, contents, and tmd are all properly
+signed by Nintendo (i.e. modified contents still only work with sigpatches).
+
+Encrypted titlekeys and tickets (which hold titlekeys) are taken from the
+ticket.db and put in encTitleKeys.bin and a tickets folder respectively,
+decrypted on 3DS hardware using Decrypt9, then placed as decTitleKeys.bin.
+Contents are encrypted using the decrypted titlekeys to match the tmd (if the
+encrypted bit is set for the contents).
+
+This might work with a decrypted title folder under "/Nintendo 3DS" if you force
+the script to read all title IDs but this hasn't been tested. This might be
+supported later. DLC wouldn't work for sure due to the different layout, and
+that is not really worth figuring out.
+
+Python 3 with PyCrypto (preferably PyCryptodome, which is actively maintained)
+is required to use this.
+
+Usage:
+1. Dump ticket.db  and title folder from a CTRNAND image. How you do this is up
+   to you (GodMode9, dumped CTRNAND, etc). Place them next to the other Python
+   scripts.
+2. Run dump_tickets.py on the ticket.db to dump tickets to a "tickets" folder,
+   plus an encTitleKeys.bin file.
+3. Decrypt the titlekeys using Decrypt9 on a 3DS with access to Decrypt9. This
+   will create decTitleKeys.bin.
+   Decrypt9WIP can be found at https://github.com/d0k3/Decrypt9WIP
+4. Place decTitleKeys.bin next to the other scripts.
+5. Run gen_cia.py to generate CIAs in the "cia" folder.
